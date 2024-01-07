@@ -16,6 +16,8 @@ class Company(Base):
     name = Column(String())
     founding_year = Column(Integer())
 
+    freebies = relationship('Freebie', backref=backref('companies'))
+
     def __repr__(self):
         return f'<Company {self.name}>'
 
@@ -34,6 +36,7 @@ class Freebie(Base):
     id = Column(Integer(), primary_key=True)
     name = Column(String())
     value = Column(Integer())
+    company_id = Column(Integer(), ForeignKey('companies.id'))
 
     def __repr__(self) -> str:
         return f'Freebie(id={self.id}, ' + \
