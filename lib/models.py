@@ -27,3 +27,16 @@ class Dev(Base):
 
     def __repr__(self):
         return f'<Dev {self.name}>'
+    
+class Freebie(Base):
+    __tablename__= 'freebies'
+
+    id = Column(Integer(), primary_key=True)
+    name = Column(String())
+    value = Column(Integer())
+
+    def __repr__(self) -> str:
+        return f'Freebie(id={self.id}, ' + \
+            f'name={self.name}, ' + \
+            f'value={self.value})'
+
