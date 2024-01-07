@@ -7,7 +7,7 @@ import random
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import Company, Freebie
+from models import Company, Freebie, Dev, company_dev
 
 if __name__== '__main__':
     engine = create_engine('sqlite:///freebies.db')
@@ -16,6 +16,8 @@ if __name__== '__main__':
 
     session.query(Company).delete()
     session.query(Freebie).delete()
+    session.query(Dev).delete()
+    session.query(company_dev).delete()
 
     fake =  Faker()
 
@@ -32,14 +34,32 @@ if __name__== '__main__':
 
         companies.append(company)
 
+
+    devs = []
+    for i in range(25):
+        dev = Dev(
+            name = fake.name(),
+        )
+
+        session.add(dev)
+        session.commit()
+
+        devs.append(dev)
     
     freebies = []
     for company in companies:
         for i in range(random.randint(1,5)):
+            dev = random.choice(devs)
+            if company not in dev.companies:
+                dev.companies.append(company)
+                session.add(dev)
+                session.commit()
+
             freebie = Freebie(
                 name = fake.name(),
                 value = random.randint(100, 1000),
                 company_id = company.id,
+                dev_id = dev.id,
             )
 
             freebies.append(freebie)
